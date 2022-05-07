@@ -5,7 +5,7 @@ class Produit {
     private $_idCategorie;
     private $_prix;
     private $_description;
-    private $_caracteristiques;
+    private $_caracteristique;
     private $_active;
     private $_img1;
     private $_img2;
@@ -48,8 +48,8 @@ class Produit {
         return $this->_description;
     }
 
-    public function getCaracteristiques() {
-        return $this->_caracteristiques;
+    public function getCaracteristique() {
+        return $this->_caracteristique;
     }
 
     public function getActive() {
@@ -101,8 +101,8 @@ class Produit {
         $this->_description = $description;
     }
 
-    public function setCaracteristiques($caracteristiques) {
-        $this->_caracteristiques = $caracteristiques;
+    public function setCaracteristique($caracteristique) {
+        $this->_caracteristique = $caracteristique;
     }
 
     public function setActive($active) {

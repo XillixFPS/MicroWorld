@@ -38,8 +38,7 @@ $listUsers = $managerUser->getUsers();
 					<td>".$value->getActive()."</td>
 					<td>".$value->getCategorie()."</td>
 					<td><img width=35 height=35 src='images/profil/".$value->getPp()."' ></td>
-					<td>
-					<!--<a href=''><button type='button'>Editer</button></a>-->";
+					<td>";
 					if($value->getActive()==0)
 					{
 						echo "<a href='active-user?id=".$value->getId()."'><button type='button' class='btn btn-success'>Activer</button></a>
@@ -50,9 +49,6 @@ $listUsers = $managerUser->getUsers();
 						</td>
 						</tr>";
 					}				
-					else {
-						echo "<tr><td colspan='15'><center>Pas de Donnée</center></td></tr>";
-					}
 				
         			}
 

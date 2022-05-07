@@ -16,7 +16,7 @@ $listCateg = $managerCategorie->getList();
   <div class="jumbotron ">
         <p class="lead">Moins de temps à chercher. Plus de résultats.</p>
     <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-          <div class="modal fade" id="exampleModalToggle" role="dialog" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+          <div class="modal fade" id="exampleModalToggle" role="dialog" aria-hidden="true" aria-labelledby="exampleModalToggleLabel">
             <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content rounded-5 shadow">
                 <div class="modal-header p-5 pb-4 border-bottom-0">
@@ -57,40 +57,45 @@ $listCateg = $managerCategorie->getList();
   <hr class="featurette-divider">
 
   </main>
-  <div class="box-produit">
-	  <h2 class="text-center mb-5">Nos nouveaux produits</h2>	
-	    <div class="row row-cols-2 justify-content-center">
+	  <h2 class="text-center mb-5">NOUVEAUTÉS</h2>	
 
 
+		<div class='container px-4 px-lg-5 mt-5'>
+    <div class='row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center'>
+      <?php
+      $listProduit = $managerProduit->getNeufDerniers();
+      foreach ($listProduit as $key => $value){
+        $nom = $managerProduit->getNomCategorie($value->getIdCategorie());
+        echo"
+            <div class='col mb-5'>
+                <div class='card h-100'>
+                    <!-- Product image-->
+                    <img class='rounded mx-auto d-block' src='images/articles/".htmlentities($value->getImg1())."' oncontextmenu='return false' alt='...' style='margin-left: 35%; margin-top: 5%; width:80px; height:auto;'/>
+                    <!-- Product details-->
+                    <div class='card-body p-4'>
+                        <div class='text-center'>
+                            <!-- Product name-->
+                            <h5 class='fw-bolder'>".$value->getNomProduit()."</h5>
+                            <!-- Product price-->
+                            ".$value->getPrix()."€
+                            <br>
+                            <small class='text-muted'>".$nom."</small>
+                        </div>
+                    </div>
+                    <!-- Product actions-->
+                    <div class='card-footer p-4 pt-0 border-top-0 bg-transparent'>
+                        <div class='text-center'><a class='btn btn-outline-dark mt-auto' href='produit?idproduit=".$value->getIdProduit()."'>Voir plus</a></div>
+                    </div>
+                </div>
+            </div>";
+      }
+     ?>
+    </div>
+</div> 
 
-		<?php
-		
 
-		foreach ($listCateg as $key => $value) {
-			$infoProduit = $managerProduit->getTroisDerniersByCategorie($value->getIdCategorie());
-			echo '<div class="col card p-2">';
-			echo '	<a class="text-decoration-none text-dark" href="'.strtolower(str_replace(" ", "-", $value->getLibelle())).'.php"><h3 class="text-center">'.$value->getLibelle().'</h3></a>';
-			echo '	<div class="row row-cols-3">';
-			  foreach ($infoProduit as $value) {
-				  echo ' <div class="col text-center">';
-				  echo ' 	<a class="text-decoration-none text-dark" href="produit.php?id='.$value['idProduit'].'">';
-				  echo ' 		<img src="'.$value['img1'].'" style="height:8em; width:auto;">';
-				  echo ' 		<p>'.$value['nom'].'</p>';
-				  echo ' 		<b>'.$value['prix'].' €</b>';
-				  echo ' 	</a>';
-				  echo ' </div>';
-
-			  }
-			echo '	</div>';
-			echo '</div>';
-		}
-		?>
-	  </div>
   </div>
-
   </div><!-- /.container -->
-  </div>
-
 
 <?php
 require_once "includes/footer.php";

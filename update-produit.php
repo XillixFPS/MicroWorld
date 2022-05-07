@@ -2,8 +2,21 @@
 require_once "includes/autoload.php";
 require_once "includes/header.php";
 
+if($_GET['idproduit']) {
+	$idproduit = $_GET['idproduit'];
+
+    $produitManager = new ProduitManager($db);
+    $produit = $produitManager->get($idproduit);
+    
+}
+
+if($_SESSION['categorie']!=7)
+{
+    header('Location: page-erreur');
+}
 if (isset($_POST['submit'])) {
     // Traitement de la photo
+    $img1 = $produit->getImg1(); 
     if(!empty($_FILES['img1']))
     {
     switch($_FILES['img1']['type'])
@@ -40,7 +53,7 @@ if (isset($_POST['submit'])) {
     }
     }
 
-    $img2 = "";  
+    $img2 = $produit->getImg2();  
     if(!empty($_FILES['img2']))
     {
     switch($_FILES['img2']['type'])
@@ -77,7 +90,7 @@ if (isset($_POST['submit'])) {
     }
     }
 
-    $img3 = "TEST"; 
+    $img3 = $produit->getImg3(); 
     if(!empty($_FILES['img3']))
     {
     switch($_FILES['img3']['type'])
@@ -114,7 +127,7 @@ if (isset($_POST['submit'])) {
     }
     }
 
-    $img4 = "";
+    $img4 = $produit->getImg4();
     if(!empty($_FILES['img4']))
     {
     switch($_FILES['img4']['type'])
@@ -151,7 +164,7 @@ if (isset($_POST['submit'])) {
     }
     }
 
-    $img5 = "";
+    $img5 = $produit->getImg5();
     if(!empty($_FILES['img5']))
     {
     switch($_FILES['img5']['type'])
@@ -214,8 +227,9 @@ if (isset($_POST['submit'])) {
     
     if($ok){
     $manager = new ProduitManager($db);
-    $produit = $manager->add(
+    $produit = $manager->update(
         new Produit([
+            'idProduit' => $idproduit,
             'nomProduit' => $nomProduit,
             'idCategorie' => $categorie,
             'prix' => $prix,
@@ -233,16 +247,17 @@ if (isset($_POST['submit'])) {
 }  
 ?>
 
+
 <div class="container px-4 px-lg-5 mt-5">
 <!--Début Formulaire-->
  <!-- Formulaire d'inscription -->
  <form method="post" action="" id="form" enctype="multipart/form-data" novalidate>
  <fieldset>
-  <legend>Ajouter un Produit</legend>
+  <legend>Mettre à jour un Produit</legend>
     <div class="form-group row">
       <div class="col-md-4 mb-3">
         <label for="nomProduit">Nom du produit</label>
-        <input type="text" class="form-control" minlength="3" maxlength="100" autocomplete="off"  spellcheck="false" name="nomProduit" id="nomProduit" required>
+        <input type="text" class="form-control" minlength="3" maxlength="100" value="<?php echo $produit->getNomProduit()?>" name="nomProduit" id="nomProduit" required>
       </div>
     </div>
     <div class="col-auto my-1">
@@ -260,51 +275,59 @@ if (isset($_POST['submit'])) {
     <div class="form-group row">
       <div class="col-md-4 mb-3">
         <label for="prix">Prix</label>
-        <input type="number" class="form-control" min=0 name="prix" id="prix" required>
+        <input type="number" class="form-control" min=0 name="prix" id="prix" value="<?php echo $produit->getPrix()?>" required>
       </div>
     </div>
     <div class="mb-3">
 		<label for="description" class="form-label">Description</label>
-		<textarea class="w-100 form-control" name="description" id="description" rows="10"></textarea>
+		<textarea class="w-100 form-control" name="description" id="description" rows="10" required><?php echo $produit->getDescription()?></textarea>
 	</div>
 	<div class="mb-3">
 		<label for="caracteristique" class="form-label">Caracteristiques</label>
-		<textarea class="w-100 form-control" name="caracteristique" id="caracteristique" rows="30" required></textarea>
+		<textarea class="w-100 form-control" name="caracteristique" id="caracteristique" rows="30" required><?php echo $produit->getCaracteristique()?></textarea>
 	</div>
     <div class="form-group row">
       <div class="col-md-4 mb-3">
         <label for="quantite">Quantité</label>
-        <input type="number" class="form-control" min=0 name="quantite" id="quantite" required>
+        <input type="number" class="form-control" min=0 name="quantite" id="quantite" value="<?php echo $produit->getQuantite()?>" required>
       </div>
     </div>
+
+    
+
     <div class="form-group row">
-      <div class="col-md-4 mb-3">
-        <label class="form-label" for="nom">Image 1</label>
-        <input class="form-control" type="file" onchange="actuPhoto(this)" id="img1" name="img1" accept="image/jpeg, image/png, image/gif" required>
-      </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label" for="nom">Image 1</label>
+            <?php echo"<img width=90 height=auto src='images/articles/".$produit->getImg1()."' >";?>
+            <input class="form-control" type="file" onchange="actuPhoto(this)" id="img1" name="img1" accept="image/jpeg, image/png, image/gif" value="<?php echo $produit->getImg1()?>">
+        </div>
     </div>
     <div class="form-group row">
       <div class="col-md-4 mb-3">
         <label class="form-label" for="nom">Image 2</label>
-        <input class="form-control" type="file" onchange="actuPhoto(this)" id="img2" name="img2" accept="image/jpeg, image/png, image/gif">
+        <?php echo"<img width=90 height=auto src='images/articles/".$produit->getImg2()."' >";?>
+        <input class="form-control" type="file" onchange="actuPhoto(this)" id="img2" name="img2" accept="image/jpeg, image/png, image/gif" value="<?php echo $produit->getImg2()?>">
       </div>
     </div>
     <div class="form-group row">
       <div class="col-md-4 mb-3">
         <label class="form-label" for="nom">Image 3</label>
-        <input class="form-control" type="file" onchange="actuPhoto(this)" id="img3" name="img3" accept="image/jpeg, image/png, image/gif">
+        <?php echo"<img width=90 height=auto src='images/articles/".$produit->getImg3()."' >";?>
+        <input class="form-control" type="file" onchange="actuPhoto(this)" id="img3" name="img3" accept="image/jpeg, image/png, image/gif" value="<?php echo $produit->getImg3()?>">
       </div>
     </div>
     <div class="form-group row">
       <div class="col-md-4 mb-3">
         <label class="form-label" for="nom">Image 4</label>
-        <input class="form-control" type="file" onchange="actuPhoto(this)" id="img4" name="img4" accept="image/jpeg, image/png, image/gif">
+        <?php echo"<img width=90 height=auto src='images/articles/".$produit->getImg4()."' >";?>
+        <input class="form-control" type="file" onchange="actuPhoto(this)" id="img4" name="img4" accept="image/jpeg, image/png, image/gif" value="<?php echo $produit->getImg4()?>">
       </div>
     </div>
     <div class="form-group row">
       <div class="col-md-4 mb-3">
         <label class="form-label" for="nom">Image 5</label>
-        <input class="form-control" type="file" onchange="actuPhoto(this)" id="img5" name="img5" accept="image/jpeg, image/png, image/gif">
+        <?php echo"<img width=90 height=auto src='images/articles/".$produit->getImg5()."' >";?>
+        <input class="form-control" type="file" onchange="actuPhoto(this)" id="img5" name="img5" accept="image/jpeg, image/png, image/gif" value="<?php echo $produit->getImg5()?>">
       </div>
     </div>
     <img src="" id="photo" style="width:20%;border-radius: 50%;" class="img-responsive float-right">
@@ -315,8 +338,6 @@ if (isset($_POST['submit'])) {
     </fieldset>
 </form>
 </div> 
-
-
 <?php
 require_once "includes/footer.php";
 ?>

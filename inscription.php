@@ -50,8 +50,28 @@ if (isset($_POST['submit'])) {
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $birthdate = $_POST['birthdate'];
 
+    $ok=TRUE;
+
+    if(strlen($lastname)<3 
+    || strlen($lastname)>45){
+        $ok=FALSE;
+    }
+
+    if(strlen($firstname)<3 
+    || strlen($firstname)>45){
+        $ok=FALSE;
+    }
+
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)
+    || strlen($email)>45){
+        $ok=FALSE;
+    }
+
+    
+  
     if( $_POST['motdepasse1'] == $_POST['motdepasse2'] ) {
         $password = hash("sha512",$_POST['motdepasse1']);
+        if ($ok=TRUE){
         $manager = new UserManager($db);
         $user = $manager->createUser(
             new User(['lastname' => $lastname,
@@ -62,7 +82,8 @@ if (isset($_POST['submit'])) {
                 'pp' => $nomfichier
             ])
         );
-    }   
+        }   
+    }
 }
 ?>
 

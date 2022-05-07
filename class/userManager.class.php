@@ -35,8 +35,8 @@ class UserManager{
     }
 
     public function delete(User $user){
-        $req = $this->_db->prepare('DELETE FROM users WHERE id = :id');
-        $req->bindValue(':lastname', $user->getId());
+        $req = $this->_db->prepare('DELETE FROM users WHERE id = :id AND active = 0 AND categorie != 7');
+        $req->bindValue(':id', $user->getId());
         $req->execute();
     }
 

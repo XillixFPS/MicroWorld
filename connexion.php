@@ -18,7 +18,7 @@ if(isset($_POST['connexion'])){
 
 <main class="form-signin">
       <form method="post" id="formId" novalidate>
-        <img class="mb-4" src="assets/icon.png" alt="" width="72" height="57">
+        <img class="mb-4" src="assets/icon.png" alt="" style="margin-left: 20%"; width="200" height="auto">
         <h1 class="h3 mb-3 fw-normal">Connexion</h1>
     
         <div class="form-floating">
@@ -36,7 +36,6 @@ if(isset($_POST['connexion'])){
           </label>
         </div>
         <button class="w-100 btn btn-lg btn-primary" type="submit" value="Valider" name="connexion">Connexion</button>
-        <p class="mt-5 mb-3 text-muted">&copy; 2021-2022</p>
       </form>
 </main>
 

@@ -16,7 +16,7 @@ class ProduitManager{
         $req->bindValue(':idCategorie', $produit->getIdCategorie());
         $req->bindValue(':prix', $produit->getPrix());
         $req->bindValue(':description', $produit->getDescription());
-        $req->bindValue(':caracteristique', $produit->getCaracteristiques());
+        $req->bindValue(':caracteristique', $produit->getCaracteristique());
         $req->bindValue(':img1', $produit->getImg1());
         $req->bindValue(':img2', $produit->getImg2());
         $req->bindValue(':img3', $produit->getImg3());
@@ -29,17 +29,16 @@ class ProduitManager{
     }
 
     public function delete(Produit $produit){
-        $this->_db->exec('DELETE FROM produit WHERE idProduit = '.$produit->getIdProduit());
+        $this->_db->exec('DELETE FROM produit WHERE idproduit = '.$produit->getIdProduit());
     }
 
     public function update(Produit $produit){
-        $req = $this->_db->prepare('UPDATE produit SET nomProduit = :nomProduit, idCategorie = :idCategorie, prix = :prix, description = :description, caracteristique = :caracteristique, active = :active, img1 = :img1, img2 = :img2, img3 = :img3, img4 = :img4, img5 = :img5, quantite = :quantite WHERE idProduit = :idProduit');
+        $req = $this->_db->prepare('UPDATE produit SET nomProduit = :nomProduit, idCategorie = :idCategorie, prix = :prix, description = :description, caracteristique = :caracteristique, img1 = :img1, img2 = :img2, img3 = :img3, img4 = :img4, img5 = :img5, quantite = :quantite WHERE idProduit = :idProduit');
         $req->bindValue(':nomProduit', $produit->getNomProduit());
         $req->bindValue(':idCategorie', $produit->getIdCategorie());
         $req->bindValue(':prix', $produit->getPrix());
         $req->bindValue(':description', $produit->getDescription());
-        $req->bindValue(':caracteristique', $produit->getCaracteristiques());
-        $req->bindValue(':active', $produit->getActive());
+        $req->bindValue(':caracteristique', $produit->getCaracteristique());
         $req->bindValue(':img1', $produit->getImg1());
         $req->bindValue(':img2', $produit->getImg2());
         $req->bindValue(':img3', $produit->getImg3());
@@ -48,36 +47,50 @@ class ProduitManager{
         $req->bindValue(':quantite', $produit->getQuantite());
         $req->bindValue(':idProduit', $produit->getIdProduit());
         $req->execute();
+        echo'<script>location.href="gerer-produit";</script>';
     }
 
     public function get($id){
         $id = (int) $id;
-        $req = $this->_db->query('SELECT * FROM produit WHERE idProduit = '.$id.' AND active = 1');
+        $req = $this->_db->query('SELECT * FROM produit WHERE idproduit = '.$id.' LIMIT 1');
         $donnees = $req->fetch(PDO::FETCH_ASSOC);
         return new Produit($donnees);
     }
     
     public function getList(){
         $produits = [];
-        $req = $this->_db->query('SELECT * FROM produit WHERE active = 1');
-        while($donnees = $req->fetch(PDO::FETCH_ASSOC)){
-            $produits[] = new Produit($donnees);
-        }
-        return $produits;
+        $req = $this->_db->query('SELECT * FROM produit');
+            while($donnees = $req->fetch(PDO::FETCH_ASSOC)){
+                $produits[] = new Produit($donnees);
+            }
+            if(count($produits)>0){
+                return $produits;
+            }
+            else{
+                ini_set('display_errors', 'off');
+                echo "Aucun produit trouvé";
+            }
+            
     }
 
     public function getListByCategorie($idCategorie){
         $produits = [];
         $req = $this->_db->query('SELECT * FROM produit WHERE idCategorie = '.$idCategorie.' AND active = 1');
-        while($donnees = $req->fetch(PDO::FETCH_ASSOC)){
-            $produits[] = new Produit($donnees);
-        }
-        return $produits;
+            while($donnees = $req->fetch(PDO::FETCH_ASSOC)){
+                $produits[] = new Produit($donnees);
+            }
+            if(count($produits)>0){
+                return $produits;
+            }
+            else{
+                ini_set('display_errors', 'off');
+                echo "Aucun produit trouvé";
+            }
     }
 
-    public function getTroisDerniersByCategorie($idCategorie){
+    public function getNeufDerniers(){
         $produits = [];
-        $req = $this->_db->query('SELECT * FROM produit WHERE idCategorie = '.$idCategorie.' AND active = 1 ORDER BY idProduit DESC LIMIT 3');
+        $req = $this->_db->query('SELECT * FROM produit WHERE active = 1 ORDER BY idProduit DESC LIMIT 9');
         while($donnees = $req->fetch(PDO::FETCH_ASSOC)){
             $produits[] = new Produit($donnees);
         }
@@ -93,23 +106,10 @@ class ProduitManager{
         return $produits;
     }
 
-    public function count(){
-        return $this->_db->query('SELECT COUNT(*) FROM produit')->fetchColumn();
-    }
-
-    public function switchActive($idProduit) {
-		$req = $this->_db->query("SELECT active FROM produit WHERE idProduit = $idProduit");
-        $active = $req->fetch(PDO::FETCH_ASSOC)['active'];
-        switch ($active) {
-            case 0:
-                $req = $this->_db->query("UPDATE produit SET active = 1 WHERE idProduit = $idProduit");
-                break;
-            
-            case 1:
-                $req = $this->_db->query("UPDATE produit SET active = 0 WHERE idProduit = $idProduit");
-                break;
-        }
-
+    public function getNomCategorie($idCategorie){
+        $req = $this->_db->query('SELECT libelle FROM categorie WHERE idCategorie = '.$idCategorie);
+        $donnees = $req->fetch(PDO::FETCH_ASSOC);
+        return $donnees['libelle'];
     }
 
     public function addUneQuantite($idProduit, $quantite){
@@ -126,10 +126,16 @@ class ProduitManager{
         $req->execute();
     }
 
-    public function getQuantite($idProduit){
-        $req = $this->_db->query('SELECT quantite FROM produit WHERE idProduit = '.$idProduit);
-        $donnees = $req->fetch(PDO::FETCH_ASSOC);
-        return $donnees['quantite'];
+    public function desactivateProduit(Produit $produit){
+        $req = $this->_db->prepare('UPDATE produit SET active = 0 WHERE idproduit = :id');
+        $req->bindValue(':id', $produit->getIdProduit());
+        $req->execute();
+    }
+
+    public function activateProduit(Produit $produit){
+        $req = $this->_db->prepare('UPDATE produit SET active = 1 WHERE idproduit = :id');
+        $req->bindValue(':id', $produit->getIdProduit());
+        $req->execute();
     }
 
 }
