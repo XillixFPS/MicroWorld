@@ -55,12 +55,19 @@ $listCateg = $managerCategorie->getList();
   </div>
 
   <hr class="featurette-divider">
-
   </main>
-	  <h2 class="text-center mb-5">NOUVEAUTÉS</h2>	
 
-
-		<div class='container px-4 px-lg-5 mt-5'>
+  <div class='container px-4 px-lg-5 mt-5'>
+  <div class='row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center'>
+    <form method="POST" action="search.php">
+        <input type="search" name="query" placeholder="Rechercher..."/>
+        <input type="submit" name="search" value="Valider">
+    </form>
+  </div>
+  </div>
+    
+    <div class='container px-4 px-lg-5 mt-5'>
+    <h2 class="text-center mb-5">NOUVEAUTÉS</h2>	
     <div class='row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center'>
       <?php
       $listProduit = $managerProduit->getNeufDerniers();

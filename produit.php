@@ -51,24 +51,23 @@ $infoProduit = $managerProduit->get($id);
                         }
                     echo"
                     </div>
-                    
                         <div class='col-md-3'><img class='card-img-top mb-5 mb-md-0' id='main' style=' width:70%; height:auto;' src='images/articles/".htmlentities($infoProduit->getImg1())."' oncontextmenu='return false' alt='...' /></div>
                         <div class='col-md-7'>
                             <h1 class='display-5 fw-bolder'>".$infoProduit->getNomProduit()."</h1>
                             <div class='fs-5 mb-5'>
                                 <span>".$infoProduit->getPrix()." €</span>
                             </div>
-                <div class='d-flex'>";
+                    <div class='d-flex'>";
                     if($_SESSION['categorie']!=7){
                         if($infoProduit->getQuantite()>0){
-                        echo"
-                        <button class='btn btn-outline-success flex-shrink-0' type='submit' name='acheter' value='acheter'>
-                            <i class='bi-cart-fill me-1'></i>
+                        echo'
+                        <a class="btn btn-outline-success flex-shrink-0" href="panier.php?action=ajout&amp;l='.htmlentities($infoProduit->getNomProduit()).'&amp; q=1 &amp; p='.htmlentities($infoProduit->getPrix()).' &amp; id='.htmlentities($infoProduit->getidProduit()).'&amp; img='.htmlentities($infoProduit->getImg1()).'&amp; quantiteMax='.htmlentities($infoProduit->getQuantite()).'" onclick="window.open(this.href, "", "toolbar=no, location=no, directories=no, status=yes, scrollbars=yes, resizable=yes, copyhistory=no, width=600, height=350"); return false;">
+                            <i class="bi-cart-fill me-1"></i>
                             Ajouter au panier !
-                        </button>
+                        </a>
                         </div>
-                        <div class='small mb-1'>Disponibilité : ".$infoProduit->getQuantite()."</div>
-                        ";
+                        <div class="small mb-1">Disponibilité : '.$infoProduit->getQuantite().'</div>
+                        ';
                         }
                         else{
                             echo "<div class='small mb-1'>Le produit n'est plus disponible</div>";

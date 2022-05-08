@@ -1,6 +1,13 @@
 <?php
-require_once "includes/autoload.php";
 require_once "includes/header.php";
+require_once "includes/autoload.php";
+
+
+$managerCommande = new CommandeManager($db);
+$managerLigneCommande = new LigneCommandeManager($db);
+$managerProduit = new ProduitManager($db);
+$Commande = $managerCommande->getByIdUser($_SESSION['id']);
+$prixTotal = 0;
 ?>
 
 <div class="container rounded bg-white mt-5 mb-5">
@@ -36,15 +43,49 @@ require_once "includes/header.php";
         <h1 class="fw-light">Historique d'achats de <?php echo $_SESSION['firstname']."\t".$_SESSION['lastname']?></h1>
       </div>
     </div>
-  </section>
-  <div class='container px-4 px-lg-5 mt-5'>
-    <div class='row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center'>
-      
-    </div>
+</section>
+
+<div class="container rounded bg-white mt-5 mb-5">
+<div class="box-perso">
+  <div class="row">
+          <b class="col">N° commande</b>
+          <b class="col">Date</b>
   </div>
-
-
-
+<?php   
+  foreach ($Commande as $value) {
+      echo '<a class="btn btn-outline-secondary mb-1 w-100 text-start" data-bs-toggle="collapse" href="#collapse'.$value->getIdCommande().'"><div class="row"><div class="d-inline col">'.$value->getIdCommande().'</div><div class="d-inline col">'.$value->getDateCommande().'</div></div></a>';
+      echo '<div id="collapse'.$value->getIdCommande().'" class="collapse">';
+      echo '<table class="table">';
+      echo '<tr>';
+      echo '    <thead>';
+      echo '        <th></th>';
+      echo '        <th>Nom</th>';
+      echo '        <th>Prix</th>';
+      echo '        <th>Quantité</th>';
+      echo '        <th>Prix Total</th>';
+      echo '    </thead>';
+      echo '</tr>';
+      $LigneCommande = $managerLigneCommande->get($value->getIdCommande());
+      foreach ($LigneCommande as $value2) {
+          $infoProduit = $managerProduit->get($value2->getIdProduit(), $value->getDateCommande());
+          echo '<tr role=button onclick="window.location.href='."'".'produit.php?id='.$value2->getIdProduit()."'".'">';
+          echo '  <td class="p-2"><img style="height:4em; width:auto;" src="images/articles/'.$infoProduit->getImg1().'" /></td>';
+          echo '  <td class="p-2">'.substr($infoProduit->getNomProduit(), 0, 30).' ...</td>';
+          echo '  <td class="p-2">'.$infoProduit->getPrix().' €</td>';
+          echo '  <td class="p-2">x '.$value2->getQuantite().'</td>';
+          echo '  <td class="p-2">'.$value2->getQuantite()*$infoProduit->getPrix().' €</td>';
+          echo '</tr>';
+          $prixTotal += $value2->getQuantite()*$infoProduit->getPrix();
+      }
+      echo '<tr><td></td><td></td><td></td><td></td><td>'.$prixTotal.' €</td></tr>';
+      echo '</table>';
+      echo '</div><br>';
+      $prixTotal = 0;
+  }
+?>      
+</div>
+</div>
 <?php
-require_once "includes/footer.php";
+include "includes/footer.php";
 ?>
+

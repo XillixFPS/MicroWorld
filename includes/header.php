@@ -5,7 +5,6 @@ if (!isset($_SESSION['categorie']))
 {
   $_SESSION['categorie']=0;
 }
-
 //On crée un ficher logs
 //On récupère la date et l'heure
 if(isset($_SESSION['login'])){
@@ -36,9 +35,9 @@ if(isset($_SESSION['login'])){
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>MicroWorld</title>
-    <link rel="shortcut icon" type="image/png" href="assets/icon.png" />
+    <link rel="shortcut icon" type="image/png" href="assets/icon.png"/>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -103,12 +102,18 @@ if(isset($_SESSION['login'])){
             ?>
         </ul><!-- fin ul navbar-nav -->
       </div><!-- fin div collaspe -->
+      
         <?php
         //Si on pas connecté, on affiche le bouton Inscription | Connexion, qui affiche un modal pour se connecter ou s'inscrire, en tant que photographe ou en tant que client
             if (!isset($_SESSION['login']) )
             {
         ?>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a class="btn btn-outline-light" href="panier.php">
+                <i class="bi-cart-fill me-1"></i>
+                Panier
+                <span class="badge bg-light text-dark ms-1 rounded-pill"></span>
+            </a>
             <div class="modal fade" id="exampleModalToggle" role="dialog" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
               <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content rounded-5 shadow">
@@ -154,6 +159,13 @@ if(isset($_SESSION['login'])){
             {
             echo "
             <div class='d-grid gap-2 d-md-flex justify-content-md-end'>
+            <a class='btn btn-outline-light' href='panier.php'>
+                <i class='bi-cart-fill me-1'></i>
+                Panier
+                <span class='badge bg-light text-dark ms-1 rounded-pill'></span>
+            </a>
+            </div>
+            <div class='d-grid gap-2 d-md-flex justify-content-md-end'>
               <div class='collapse navbar-collapse'>
                 <ul class='navbar-nav dropdown-menu-lg-end'>
                   <li class='nav-item dropdown'>
@@ -167,7 +179,7 @@ if(isset($_SESSION['login'])){
                   </li>   
                 </ul>
               </div>
-            </div>";
+              </div>";
             }
             ?>
     

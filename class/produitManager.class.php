@@ -88,6 +88,24 @@ class ProduitManager{
             }
     }
 
+    public function searchProduit($query){
+        $produits = [];
+        $req = $this->_db->query('SELECT * FROM produit WHERE nomProduit LIKE "%'.$query.'%" AND active = 1 ORDER BY idProduit DESC'); 
+        /*if($req->rowCount()==0){
+            //A remplir
+        }*/
+        while($donnees = $req->fetch(PDO::FETCH_ASSOC)){
+        $produits[] = new Produit($donnees);
+        }
+        if(count($produits)>0){
+            return $produits;
+        }
+        else{
+            ini_set('display_errors', 'off');
+            echo "Aucun produit trouvé";
+            }
+        }   
+
     public function getNeufDerniers(){
         $produits = [];
         $req = $this->_db->query('SELECT * FROM produit WHERE active = 1 ORDER BY idProduit DESC LIMIT 9');

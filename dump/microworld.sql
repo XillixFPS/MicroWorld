@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 07, 2022 at 01:24 AM
+-- Generation Time: May 08, 2022 at 01:21 AM
 -- Server version: 5.7.36
 -- PHP Version: 7.4.26
 
@@ -20,22 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `microworld`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `acheter`
---
-
-DROP TABLE IF EXISTS `acheter`;
-CREATE TABLE IF NOT EXISTS `acheter` (
-  `idproduit` int(11) NOT NULL,
-  `idacheter` int(11) NOT NULL,
-  `iduser` int(11) NOT NULL,
-  `quantite` int(11) NOT NULL,
-  PRIMARY KEY (`idproduit`),
-  KEY `iduser` (`iduser`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -64,6 +48,48 @@ INSERT INTO `categorie` (`idCategorie`, `libelle`, `active`) VALUES
 (6, 'Souris', 1),
 (7, 'Casque audio', 1),
 (8, 'Microphone', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `commande`
+--
+
+DROP TABLE IF EXISTS `commande`;
+CREATE TABLE IF NOT EXISTS `commande` (
+  `idCommande` int(11) NOT NULL AUTO_INCREMENT,
+  `idUser` int(11) NOT NULL,
+  `dateCommande` date NOT NULL,
+  PRIMARY KEY (`idCommande`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `commande`
+--
+
+INSERT INTO `commande` (`idCommande`, `idUser`, `dateCommande`) VALUES
+(3, 4, '2022-05-08');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lignecommande`
+--
+
+DROP TABLE IF EXISTS `lignecommande`;
+CREATE TABLE IF NOT EXISTS `lignecommande` (
+  `idCommande` int(11) NOT NULL,
+  `IdProduit` int(11) NOT NULL,
+  `quantite` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `lignecommande`
+--
+
+INSERT INTO `lignecommande` (`idCommande`, `IdProduit`, `quantite`) VALUES
+(3, 12, 1),
+(3, 11, 1);
 
 -- --------------------------------------------------------
 
@@ -166,7 +192,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `lastname`, `firstname`, `email`, `password`, `birthdate`, `active`, `categorie`, `pp`) VALUES
-(3, 'admin', 'admin', 'admin@admin.com', 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec', '2002-07-09', 1, 7, 'MEI8ylwspzU08Gf1yvlz.png');
+(3, 'admin', 'admin', 'admin@admin.com', 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec', '2002-07-09', 1, 7, 'MEI8ylwspzU08Gf1yvlz.png'),
+(4, 'Monrocq', 'Ugo', 'ugo.monrocq@gmail.com', 'df6b9fb15cfdbb7527be5a8a6e39f39e572c8ddb943fbc79a943438e9d3d85ebfc2ccf9e0eccd9346026c0b6876e0e01556fe56f135582c05fbdbb505d46755a', '2022-05-05', 1, 1, 'AtTgUvcxIKbCZHLyGRfB.jpg');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
